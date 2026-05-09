@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const COUNT         = isMobile ? 70 : 150;
         const CONNECT_DIST  = isMobile ? 70 : 100;
         const MAX_LINES     = isMobile ? 60 : 180;
-        const SPREAD        = { x: 750, y: 520, z: 380 };
+        const SPREAD        = { x: 1400, y: 850, z: 500 };
 
         // ── Scene / Camera / Renderer ──────────────────
         const scene    = new THREE.Scene();
