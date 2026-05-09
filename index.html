@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Diseño Web y Front-End de alta conversión. Transformo tus ideas en experiencias digitales que venden.">
+    <title>Gerardo Castro | Diseño Web Premium</title>
+    
+    <!-- Tailwind CSS (CDN para rápida implementación) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#0a0a0f',
+                        surface: '#12121a',
+                        primary: '#6d28d9',   /* Purple */
+                        secondary: '#0ea5e9', /* Sky Blue */
+                        accent: '#f59e0b',    /* Amber */
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Three.js (3D Particles) -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body class="bg-dark text-slate-300 font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+
+    <!-- Animación de Fondo (Blobs) -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-primary/20 blur-[120px] mix-blend-screen animate-blob"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[35vw] h-[35vw] rounded-full bg-secondary/20 blur-[120px] mix-blend-screen animate-blob animation-delay-2000"></div>
+    </div>
+
+    <!-- HEADER / NAV -->
+    <header id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 py-4 px-6 md:px-12 backdrop-blur-none border-b border-white/0">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 group">
+                <!-- Icono abstracto inspirado en la imagen de referencia (M estilizada) -->
+                <svg width="40" height="32" viewBox="0 0 48 32" class="w-10 h-auto drop-shadow-[0_0_8px_rgba(245,158,11,0.4)] group-hover:drop-shadow-[0_0_12px_rgba(14,165,233,0.6)] transition-all duration-300">
+                  <defs>
+                    <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#f59e0b" /> <!-- Accent: Naranja/Amber -->
+                      <stop offset="100%" stop-color="#0ea5e9" /> <!-- Secondary: Azul -->
+                    </linearGradient>
+                  </defs>
+                  <line x1="8" y1="28" x2="16" y2="4" stroke="url(#logoGrad)" stroke-width="8" stroke-linecap="round" />
+                  <line x1="22" y1="28" x2="30" y2="4" stroke="url(#logoGrad)" stroke-width="8" stroke-linecap="round" />
+                  <line x1="36" y1="28" x2="44" y2="4" stroke="url(#logoGrad)" stroke-width="8" stroke-linecap="round" />
+                </svg>
+                <div class="flex flex-col ml-1">
+                    <span class="font-heading font-black text-xl leading-none text-white tracking-wider">MAKETERO</span>
+                    <span class="font-heading font-medium text-[0.65rem] leading-none text-secondary tracking-[0.45em] mt-1">WEB</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#inicio" class="text-slate-300 hover:text-white transition-colors duration-300">Inicio</a>
+                <a href="#servicios" class="text-slate-300 hover:text-white transition-colors duration-300">Servicios</a>
+                <a href="#portfolio" class="text-slate-300 hover:text-white transition-colors duration-300">Portafolio</a>
+                <a href="#experiencia" class="text-slate-300 hover:text-white transition-colors duration-300">Experiencia</a>
+                <a href="#contacto" class="relative group px-5 py-2 rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] text-white border border-white/10 hover:border-transparent flex items-center justify-center">
+                    <div class="absolute inset-0 bg-white/10 transition-opacity duration-300 group-hover:opacity-0 -z-10"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-accent to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-20"></div>
+                    <span class="relative z-10 font-medium">Contactar</span>
+                </a>
+            </nav>
+
+            <!-- Mobile Toggle -->
+            <button id="menu-btn" class="md:hidden text-2xl text-white focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div id="mobile-menu" class="fixed inset-0 bg-dark/95 backdrop-blur-xl flex-col items-center justify-center gap-8 text-xl font-heading hidden opacity-0 transition-opacity duration-300 h-screen w-full -z-10 pt-24 pb-12 overflow-y-auto">
+            <button id="close-btn" class="absolute top-6 right-6 text-3xl text-white focus:outline-none">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="#inicio" class="mobile-link text-white hover:text-secondary mb-6">Inicio</a>
+            <a href="#servicios" class="mobile-link text-white hover:text-secondary mb-6">Servicios</a>
+            <a href="#portfolio" class="mobile-link text-white hover:text-secondary mb-6">Portafolio</a>
+            <a href="#experiencia" class="mobile-link text-white hover:text-secondary mb-6">Experiencia</a>
+            <a href="#contacto" class="mobile-link mt-4 px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold">Contactar</a>
+            
+            <div class="mt-auto pt-10 flex gap-6">
+                <a href="#" class="text-slate-400 hover:text-white"><i class="fa-brands fa-github text-2xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-white"><i class="fa-brands fa-linkedin-in text-2xl"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section id="inicio" class="relative min-h-screen flex flex-col justify-center pt-40 md:pt-48 pb-12 px-6 overflow-hidden">
+            <!-- Canvas 3D Particles -->
+            <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+            <div class="max-w-5xl mx-auto text-center relative z-10 reveal -mt-[32px]">
+                <h2 class="text-xs md:text-sm tracking-[0.3em] font-medium text-slate-400 uppercase mb-8 ml-2">Diseñador Web & Front-End Developer</h2>
+                
+                <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60 mb-6 leading-[1.1]">
+                    Experiencias digitales que <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">venden.</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    No hago simples páginas web. Construyo herramientas digitales estratégicas, optimizadas y visualmente impactantes, diseñadas para convertir a tus visitantes en clientes leales.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#contacto" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-dark font-bold font-heading text-lg hover:bg-slate-200 transition-all hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                        Iniciar Proyecto
+                    </a>
+                    <a href="#portfolio" class="w-full sm:w-auto px-8 py-4 rounded-full bg-surface/50 backdrop-blur-md border border-white/10 text-white font-bold font-heading text-lg hover:bg-white/10 transition-all">
+                        Ver Trabajos <i class="fa-solid fa-arrow-down ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Socials & Scroll Indicator -->
+                <div class="mt-10 md:mt-16 w-full flex justify-center gap-6 text-slate-500">
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:text-secondary hover:border-secondary transition-all"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:text-secondary hover:border-secondary transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:text-secondary hover:border-secondary transition-all"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PITCH / SERVICIOS SECTION -->
+        <section id="servicios" class="py-24 px-6 relative z-10 bg-surface/30">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16 reveal flex flex-col items-center">
+                    <h2 class="text-sm tracking-widest text-secondary font-bold uppercase mb-2">Mi Propuesta de Valor</h2>
+                    <h3 class="text-3xl md:text-4xl font-heading font-bold text-white max-w-2xl">¿Por qué tu negocio necesita un diseño a medida?</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Tarjeta 1 -->
+                    <div class="glass-card p-8 rounded-2xl reveal reveal-delay-1">
+                        <div class="w-14 h-14 rounded-xl bg-primary/20 text-primary flex items-center justify-center text-2xl mb-6 shadow-lg shadow-primary/10">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h4 class="text-xl font-heading font-bold text-white mb-3">Rendimiento Extremo</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Webs ultra rápidas desarrolladas con código limpio. Un sitio veloz reduce el porcentaje de rebote y mejora drásticamente el SEO y las conversiones.
+                        </p>
+                    </div>
+                    <!-- Tarjeta 2 -->
+                    <div class="glass-card p-8 rounded-2xl reveal reveal-delay-2">
+                        <div class="w-14 h-14 rounded-xl bg-secondary/20 text-secondary flex items-center justify-center text-2xl mb-6 shadow-lg shadow-secondary/10">
+                            <i class="fa-solid fa-paintbrush"></i>
+                        </div>
+                        <h4 class="text-xl font-heading font-bold text-white mb-3">Diseño UI/UX Premium</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Interfaces que no solo son hermosas, sino que guían intuitivamente al usuario hacia tu objetivo principal. Destaca por encima de tu competencia.
+                        </p>
+                    </div>
+                    <!-- Tarjeta 3 -->
+                    <div class="glass-card p-8 rounded-2xl reveal reveal-delay-3">
+                        <div class="w-14 h-14 rounded-xl bg-accent/20 text-accent flex items-center justify-center text-2xl mb-6 shadow-lg shadow-accent/10">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <h4 class="text-xl font-heading font-bold text-white mb-3">Responsive 100%</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Diseños "Mobile-First". Aseguro una experiencia impecable en todos los dispositivos para que no pierdas ningún cliente por un mal formato.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTAFOLIO SECTION -->
+        <section id="portfolio" class="py-32 px-6 relative z-10 overflow-hidden border-y border-white/5 bg-[#08080c]">
+            
+            <!-- Electrifying Background Elements -->
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                <!-- Glowing grid -->
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+                <!-- Dynamic energetic blobs -->
+                <div class="absolute top-1/2 left-1/4 w-[40rem] h-[40rem] bg-primary/20 blur-[120px] rounded-full mix-blend-screen animate-blob -translate-y-1/2"></div>
+                <div class="absolute top-1/2 right-1/4 w-[30rem] h-[30rem] bg-secondary/20 blur-[100px] rounded-full mix-blend-screen animate-blob animation-delay-2000 -translate-y-1/2"></div>
+            </div>
+
+            <div class="max-w-6xl mx-auto relative z-10">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                    <div>
+                        <h2 class="text-sm tracking-widest text-secondary font-bold uppercase mb-2 flex items-center gap-2"><i class="fa-solid fa-bolt text-accent animate-pulse"></i> Casos de Éxito</h2>
+                        <h3 class="text-4xl md:text-5xl font-heading font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">Trabajos Destacados</h3>
+                    </div>
+                    <p class="text-slate-400 max-w-sm mt-4 md:mt-0 text-sm md:text-right border-l-2 border-primary/50 pl-4 md:border-l-0 md:pl-0">
+                        Explora la fusión entre estética y funcionalidad. Cada proyecto representa un desafío de negocio resuelto.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Proyecto 1 -->
+                    <div class="group relative rounded-2xl overflow-hidden cursor-pointer aspect-[4/3] reveal hover:shadow-[0_0_30px_rgba(109,40,217,0.3)] transition-all duration-500 ring-1 ring-white/10 hover:ring-primary/50">
+                        <div class="absolute inset-0 bg-dark/20 group-hover:bg-transparent transition-all duration-500 z-10"></div>
+                        <img src="img/p1.jpg" alt="Contraloria del Estado" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=450&fit=crop'">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0">
+                            <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white mb-3 w-max border border-white/20">Institucional</span>
+                            <h4 class="font-heading text-2xl font-bold text-white mb-1">Diseño de Portales</h4>
+                            <p class="text-slate-300 text-sm">Gobierno del Estado</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto 2 -->
+                    <div class="group relative rounded-2xl overflow-hidden cursor-pointer aspect-[4/3] reveal hover:shadow-[0_0_30px_rgba(14,165,233,0.3)] transition-all duration-500 ring-1 ring-white/10 hover:ring-secondary/50 reveal-delay-1">
+                        <img src="img/p2.jpg" alt="Identidad Corporativa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1542744094-3a31f272c490?w=600&h=450&fit=crop'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0">
+                            <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white mb-3 w-max border border-white/20">Branding</span>
+                            <h4 class="font-heading text-2xl font-bold text-white mb-1">Diseño Gráfico</h4>
+                            <p class="text-slate-300 text-sm">Identidad Corporativa</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto 3 -->
+                    <div class="group relative rounded-2xl overflow-hidden cursor-pointer aspect-[4/3] reveal hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] transition-all duration-500 ring-1 ring-white/10 hover:ring-accent/50 reveal-delay-2">
+                        <img src="img/p3.jpg" alt="Diseño Web" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=450&fit=crop'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0">
+                            <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white mb-3 w-max border border-white/20">UX/UI</span>
+                            <h4 class="font-heading text-2xl font-bold text-white mb-1">Maquetado Web</h4>
+                            <p class="text-slate-300 text-sm">Conceptos minimalistas</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto 4 (NUEVO) -->
+                    <div class="group relative rounded-2xl overflow-hidden cursor-pointer aspect-[4/3] reveal hover:shadow-[0_0_30px_rgba(109,40,217,0.3)] transition-all duration-500 ring-1 ring-white/10 hover:ring-primary/50">
+                        <img src="img/p4.jpg" alt="Diseño APP" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=450&fit=crop'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0">
+                            <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white mb-3 w-max border border-white/20">Mobile App</span>
+                            <h4 class="font-heading text-2xl font-bold text-white mb-1">Diseño APP iOS</h4>
+                            <p class="text-slate-300 text-sm">Interfaces intuitivas y fluidas</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto 5 (NUEVO) -->
+                    <div class="group relative rounded-2xl overflow-hidden cursor-pointer aspect-[4/3] reveal hover:shadow-[0_0_30px_rgba(14,165,233,0.3)] transition-all duration-500 ring-1 ring-white/10 hover:ring-secondary/50 reveal-delay-1">
+                        <img src="img/p5.jpg" alt="Infografías" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=450&fit=crop'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0">
+                            <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white mb-3 w-max border border-white/20">Creatividad</span>
+                            <h4 class="font-heading text-2xl font-bold text-white mb-1">Diseño Creativo</h4>
+                            <p class="text-slate-300 text-sm">Infografías de alto impacto</p>
+                        </div>
+                    </div>
+
+                    <!-- Proyecto 6 (NUEVO) -->
+                    <div class="group relative rounded-2xl overflow-hidden cursor-pointer aspect-[4/3] reveal hover:shadow-[0_0_30px_rgba(245,158,11,0.3)] transition-all duration-500 ring-1 ring-white/10 hover:ring-accent/50 reveal-delay-2">
+                        <img src="img/p6.jpg" alt="Sistemas Web" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=450&fit=crop'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-20 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0">
+                            <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold text-white mb-3 w-max border border-white/20">Full-Stack</span>
+                            <h4 class="font-heading text-2xl font-bold text-white mb-1">Micro-Portales</h4>
+                            <p class="text-slate-300 text-sm">Desarrollo a medida gubernamental</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS & EXPERIENCIA SECTION -->
+        <section id="experiencia" class="py-24 px-6 relative z-10 bg-surface/30">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+                
+                <!-- Skills Panel -->
+                <div class="reveal">
+                    <h2 class="text-3xl font-heading font-bold text-white mb-8">El Stack Tecnológico</h2>
+                    <p class="text-slate-400 mb-8 leading-relaxed">
+                        No me limito a herramientas específicas; me enfoco en las que mejores resultados de negocio aportan. Domino desde la estructura base hasta los detalles visuales de alta conversión.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-3">
+                        <div class="px-5 py-3 glass-card rounded-full flex items-center justify-center gap-2 hover:border-orange-500/50 transition-colors">
+                            <i class="fa-brands fa-html5 text-orange-500 text-xl"></i>
+                            <span class="text-white font-medium">HTML5</span>
+                        </div>
+                        <div class="px-5 py-3 glass-card rounded-full flex items-center justify-center gap-2 hover:border-blue-500/50 transition-colors">
+                            <i class="fa-brands fa-css3-alt text-blue-500 text-xl"></i>
+                            <span class="text-white font-medium">CSS3 / Tailwind</span>
+                        </div>
+                        <div class="px-5 py-3 glass-card rounded-full flex items-center justify-center gap-2 hover:border-yellow-400/50 transition-colors">
+                            <i class="fa-brands fa-js mt-1 text-yellow-400 text-xl"></i>
+                            <span class="text-white font-medium">JavaScript</span>
+                        </div>
+                        <div class="px-5 py-3 glass-card rounded-full flex items-center justify-center gap-2 hover:border-purple-500/50 transition-colors">
+                            <i class="fa-brands fa-figma text-purple-500 text-xl"></i>
+                            <span class="text-white font-medium">Figma / UI Design</span>
+                        </div>
+                        <div class="px-5 py-3 glass-card rounded-full flex items-center justify-center gap-2 hover:border-zinc-400/50 transition-colors">
+                            <i class="fa-solid fa-object-group text-zinc-400 text-xl"></i>
+                            <span class="text-white font-medium">Arquitectura Web</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Ruta de Trabajo (Minimalista) -->
+                <div class="reveal mt-6 lg:mt-0">
+                    <h2 class="text-3xl font-heading font-bold text-white mb-6">Ruta de Trabajo</h2>
+                    
+                    <div class="relative before:absolute before:inset-0 before:ml-[15px] before:h-full before:w-px before:bg-gradient-to-b before:from-primary/50 before:via-secondary/20 before:to-transparent space-y-6">
+                        
+                        <!-- Item 1 -->
+                        <div class="relative flex group is-active">
+                            <div class="flex items-center justify-center w-[30px] h-[30px] rounded border border-white/20 bg-dark text-slate-300 group-[.is-active]:text-primary group-[.is-active]:border-primary shadow-[0_0_0_4px_rgba(10,10,15,1)] shrink-0 z-10 transition-colors">
+                                <span class="font-heading font-bold text-[10px]">01</span>
+                            </div>
+                            <div class="ml-5">
+                                <h4 class="font-bold text-white text-sm flex items-center gap-2">Estrategia & Diseño <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span></h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Definimos arquitectura visual, wireframes y estructura de UX/UI.</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="relative flex group">
+                            <div class="flex items-center justify-center w-[30px] h-[30px] rounded border border-white/20 bg-dark text-slate-400 group-hover:text-secondary group-hover:border-secondary shadow-[0_0_0_4px_rgba(10,10,15,1)] shrink-0 z-10 transition-colors">
+                                <span class="font-heading font-bold text-[10px]">02</span>
+                            </div>
+                            <div class="ml-5">
+                                <h4 class="font-bold text-white text-sm group-hover:text-secondary transition-colors">Desarrollo y Código</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Construcción con tecnologías modernas, código limpio y responsivo.</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="relative flex group">
+                            <div class="flex items-center justify-center w-[30px] h-[30px] rounded border border-white/20 bg-dark text-slate-400 group-hover:text-accent group-hover:border-accent shadow-[0_0_0_4px_rgba(10,10,15,1)] shrink-0 z-10 transition-colors">
+                                <span class="font-heading font-bold text-[10px]">03</span>
+                            </div>
+                            <div class="ml-5">
+                                <h4 class="font-bold text-white text-sm group-hover:text-accent transition-colors">Revisiones & Beta</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Evaluación del proyecto en ambiente beta y ajustes según feedback.</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 4 -->
+                        <div class="relative flex group">
+                            <div class="flex items-center justify-center w-[30px] h-[30px] rounded border border-white/20 bg-dark text-slate-400 group-hover:text-secondary group-hover:border-secondary shadow-[0_0_0_4px_rgba(10,10,15,1)] shrink-0 z-10 transition-colors">
+                                <span class="font-heading font-bold text-[10px]">04</span>
+                            </div>
+                            <div class="ml-5 pb-2">
+                                <h4 class="font-bold text-white text-sm group-hover:text-secondary transition-colors">Lanzamiento Oficial</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Despliegue de tu nueva plataforma, optimizada y lista para vender.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CTA & FORMULARIO (LEAD GEN) -->
+        <section id="contacto" class="py-24 px-6 relative z-10 scroll-mt-[-120px]">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 pointer-events-none"></div>
+            
+            <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+                <!-- Copia persuasiva -->
+                <div class="lg:w-1/2 reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium mb-6">
+                        <i class="fa-solid fa-envelope"></i> Disponibilidad Limitada
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white mb-6 leading-tight">
+                        Eleva tu marca digital <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary text-glow">ahora mismo.</span>
+                    </h2>
+                    <p class="text-xl text-slate-400 mb-8 leading-relaxed">
+                        Completa el formulario y cuéntame sobre tu proyecto. Analizaré tu caso personalmente y te propondré una solución enfocada a resultados.
+                    </p>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-4 text-slate-300">
+                            <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-white"><i class="fa-solid fa-check"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white">Respuestas Rápidas</h4>
+                                <span class="text-sm text-slate-400">En menos de 24 horas laborables</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 text-slate-300">
+                            <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-white"><i class="fa-solid fa-bullseye"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white">Propuesta a la medida</h4>
+                                <span class="text-sm text-slate-400">Soluciones para vender más y verte mejor</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Form -->
+                <div class="lg:w-1/2 w-full reveal">
+                    <form class="glass-card p-8 md:p-12 rounded-3xl relative overflow-hidden border border-white/10 shadow-2xl">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <!-- Nombre -->
+                            <div class="form-group">
+                                <label for="nombre" class="block text-sm font-medium text-slate-300 mb-2">Nombre completo</label>
+                                <input type="text" id="nombre" class="w-full bg-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600" placeholder="Ej. Juan Pérez" required>
+                            </div>
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Correo de trabajo</label>
+                                <input type="email" id="email" class="w-full bg-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600" placeholder="juan@tuempresa.com" required>
+                            </div>
+                        </div>
+
+                        <!-- Tipo de Proyecto -->
+                        <div class="form-group mb-6">
+                            <label for="tipo" class="block text-sm font-medium text-slate-300 mb-2">¿Qué necesitas construir?</label>
+                            <div class="relative">
+                                <select id="tipo" class="appearance-none w-full bg-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all cursor-pointer">
+                                    <option value="" disabled selected hidden>Selecciona una opción</option>
+                                    <option value="landing" class="bg-surface">Landing Page (Marketing / Ventas)</option>
+                                    <option value="corporate" class="bg-surface">Web Corporativa Completa</option>
+                                    <option value="ecommerce" class="bg-surface">Tienda Online (E-commerce)</option>
+                                    <option value="redesign" class="bg-surface">Rediseño UI/UX de web actual</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rango Inversión -->
+                        <div class="form-group mb-6">
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Rango de inversión estimado (USD)</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <label class="radio-label cursor-pointer relative">
+                                    <input type="radio" name="budget" value="pequeno" class="peer sr-only">
+                                    <div class="w-full text-center px-2 py-3 bg-dark/30 border border-white/5 rounded-xl peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-white text-slate-400 text-sm transition-all hover:bg-dark/60">&lt; $500</div>
+                                </label>
+                                <label class="radio-label cursor-pointer relative">
+                                    <input type="radio" name="budget" value="medio" class="peer sr-only" checked>
+                                    <div class="w-full text-center px-2 py-3 bg-dark/30 border border-white/5 rounded-xl peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-white text-slate-400 text-sm transition-all hover:bg-dark/60">$500 - $1.5k</div>
+                                </label>
+                                <label class="radio-label cursor-pointer relative">
+                                    <input type="radio" name="budget" value="grande" class="peer sr-only">
+                                    <div class="w-full text-center px-2 py-3 bg-dark/30 border border-white/5 rounded-xl peer-checked:bg-primary/20 peer-checked:border-primary peer-checked:text-white text-slate-400 text-sm transition-all hover:bg-dark/60">&gt; $1.5k</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Detalles -->
+                        <div class="form-group mb-8">
+                            <label for="mensaje" class="block text-sm font-medium text-slate-300 mb-2">Cuéntame brevemente sobre tu negocio</label>
+                            <textarea id="mensaje" rows="3" class="w-full bg-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600 resize-none" placeholder="Problemas actuales, metas de negocio, referencias..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold font-heading text-lg hover:shadow-[0_0_20px_rgba(109,40,217,0.4)] transition-all transform hover:-translate-y-1 active:translate-y-0 disabled:opacity-50 flex justify-center items-center gap-2 group">
+                            <span>Enviar Solicitud</span>
+                            <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-dark py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <svg width="32" height="24" viewBox="0 0 48 32" class="w-8 h-auto opacity-80">
+                  <defs>
+                    <linearGradient id="logoGradFooter" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#f59e0b" />
+                      <stop offset="100%" stop-color="#0ea5e9" />
+                    </linearGradient>
+                  </defs>
+                  <line x1="8" y1="28" x2="16" y2="4" stroke="url(#logoGradFooter)" stroke-width="8" stroke-linecap="round" />
+                  <line x1="22" y1="28" x2="30" y2="4" stroke="url(#logoGradFooter)" stroke-width="8" stroke-linecap="round" />
+                  <line x1="36" y1="28" x2="44" y2="4" stroke="url(#logoGradFooter)" stroke-width="8" stroke-linecap="round" />
+                </svg>
+                <div class="flex flex-col ml-1">
+                    <span class="font-heading font-black text-lg leading-none text-white tracking-wider">MAKETERO</span>
+                    <span class="font-heading font-medium text-[0.60rem] leading-none text-secondary tracking-[0.45em] mt-1">WEB</span>
+                </div>
+            </div>
+            
+            <p class="text-slate-500 text-sm">
+                &copy; 2024 Gerardo Castro. Diseño Web & Front-End. Todos los derechos reservados.
+            </p>
+
+            <div class="flex gap-4">
+                <a href="#inicio" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white flex justify-center items-center hover:bg-white/10 transition-colors">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de interacciones -->
+    <script src="script.js"></script>
+</body>
+</html>
