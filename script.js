@@ -104,8 +104,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const isMobile      = window.innerWidth < 768;
         const COUNT         = isMobile ? 70 : 150;
-        const CONNECT_DIST  = isMobile ? 100 : 140;
-        const MAX_LINES     = isMobile ? 120 : 380;
+        const CONNECT_DIST  = isMobile ? 70 : 100;
+        const MAX_LINES     = isMobile ? 60 : 180;
         const SPREAD        = { x: 750, y: 520, z: 380 };
 
         // ── Scene / Camera / Renderer ──────────────────
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const lineMat = new THREE.LineBasicMaterial({
             vertexColors: true,
             transparent:  true,
-            opacity:      0.40,
+            opacity:      0.12,
             blending:     THREE.AdditiveBlending,
             depthWrite:   false,
         });
