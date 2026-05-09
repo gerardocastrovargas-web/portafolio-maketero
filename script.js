@@ -96,7 +96,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =====================================================
-    // 5. THREE.JS — HERO PARTICLE NETWORK (3D)
+    // 5. FILTROS DE PORTAFOLIO
+    // =====================================================
+    const filterBtns  = document.querySelectorAll(".filter-btn");
+    const portfolioCards = document.querySelectorAll(".portfolio-card");
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const filter = btn.dataset.filter;
+
+            // Actualizar botón activo
+            filterBtns.forEach(b => {
+                b.classList.remove("active-filter", "bg-primary/20", "text-white");
+                b.classList.add("text-slate-400");
+            });
+            btn.classList.add("active-filter", "bg-primary/20", "text-white");
+            btn.classList.remove("text-slate-400");
+
+            // Filtrar tarjetas
+            portfolioCards.forEach(card => {
+                const match = filter === "all" || card.dataset.category === filter;
+                card.style.transition = "opacity 0.35s ease, transform 0.35s ease";
+                if (match) {
+                    card.style.opacity  = "1";
+                    card.style.transform = "scale(1)";
+                    card.style.display  = "flex";
+                } else {
+                    card.style.opacity  = "0";
+                    card.style.transform = "scale(0.95)";
+                    setTimeout(() => {
+                        if (card.dataset.category !== filter && filter !== "all") {
+                            card.style.display = "none";
+                        }
+                    }, 350);
+                }
+            });
+        });
+    });
+
+    // =====================================================
+    // 6. THREE.JS — HERO PARTICLE NETWORK (3D)
     // =====================================================
     function initHeroParticles() {
         const canvas = document.getElementById("hero-canvas");
