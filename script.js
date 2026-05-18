@@ -72,15 +72,44 @@ document.addEventListener("DOMContentLoaded", () => {
     reveals.forEach(el => revealObserver.observe(el));
 
     // =====================================================
-    // 4. FORMULARIO DE CONTACTO
+    // 4. FORMULARIO DE CONTACTO (AJAX WEB3FORMS)
     // =====================================================
     const form = document.querySelector("form");
     if (form) {
-        form.addEventListener("submit", () => {
-            // Dejamos que el navegador envíe el formulario de manera nativa
-            // para que FormSubmit pueda procesarlo y mostrar la página de activación.
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
             const btn = form.querySelector('button[type="submit"]');
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Redirigiendo...`;
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...`;
+            btn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    body: formData
+                });
+                
+                const data = await response.json();
+
+                if (data.success) {
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> ¡Solicitud Enviada!`;
+                    btn.classList.add("bg-green-500", "from-green-500", "to-green-400");
+                    form.reset();
+                } else {
+                    btn.innerHTML = `<i class="fa-solid fa-xmark"></i> Error al enviar`;
+                    btn.classList.add("bg-red-500", "from-red-500", "to-red-400");
+                }
+            } catch (error) {
+                btn.innerHTML = `<i class="fa-solid fa-xmark"></i> Error de conexión`;
+                btn.classList.add("bg-red-500", "from-red-500", "to-red-400");
+            }
+
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+                btn.classList.remove("bg-green-500", "from-green-500", "to-green-400", "bg-red-500", "from-red-500", "to-red-400");
+            }, 4000);
         });
     }
 
