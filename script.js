@@ -76,22 +76,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // =====================================================
     const form = document.querySelector("form");
     if (form) {
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
+        form.addEventListener("submit", () => {
+            // Dejamos que el navegador envíe el formulario de manera nativa
+            // para que FormSubmit pueda procesarlo y mostrar la página de activación.
             const btn = form.querySelector('button[type="submit"]');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...`;
-            btn.disabled = true;
-            setTimeout(() => {
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> ¡Solicitud Enviada!`;
-                btn.classList.add("bg-green-500", "from-green-500", "to-green-400");
-                form.reset();
-                setTimeout(() => {
-                    btn.innerHTML = originalHTML;
-                    btn.disabled = false;
-                    btn.classList.remove("bg-green-500", "from-green-500", "to-green-400");
-                }, 3000);
-            }, 1500);
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Redirigiendo...`;
         });
     }
 
