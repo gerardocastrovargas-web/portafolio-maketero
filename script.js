@@ -133,7 +133,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Filtrar tarjetas
             portfolioCards.forEach(card => {
-                const match = filter === "all" || card.dataset.category === filter;
+                const categories = card.dataset.category ? card.dataset.category.split(/\s+/) : [];
+                const match = filter === "all" || categories.includes(filter);
                 card.style.transition = "opacity 0.35s ease, transform 0.35s ease";
                 if (match) {
                     card.style.opacity  = "1";
@@ -143,7 +144,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     card.style.opacity  = "0";
                     card.style.transform = "scale(0.95)";
                     setTimeout(() => {
-                        if (card.dataset.category !== filter && filter !== "all") {
+                        const currentCats = card.dataset.category ? card.dataset.category.split(/\s+/) : [];
+                        if (!currentCats.includes(filter) && filter !== "all") {
                             card.style.display = "none";
                         }
                     }, 350);
